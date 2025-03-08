@@ -216,87 +216,91 @@ const ExtensoMeter = () => {
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Chart Section */}
         <div className="flex-1 bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6">
-          <h2 className="text-xl font-semibold mb-4">ExtensoMeter Data</h2>
-          <Line
-            data={{
-              labels: selectedData.labels,
-              datasets: selectedData.datasets,
-            }}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: { position: "top" },
-                title: { display: true, text: "ExtensoMeter" },
-              },
-              scales: {
-                x: {
-                  grid: { color: "rgba(255, 255, 255, 0.1)" },
-                  ticks: { color: "rgba(255, 255, 255, 0.7)" },
-                },
-                y: {
-                  grid: { color: "rgba(255, 255, 255, 0.1)" },
-                  ticks: { color: "rgba(255, 255, 255, 0.7)" },
-                },
-              },
-            }}
-          />
+  <h2 className="text-xl font-semibold mb-4">ExtensoMeter Data</h2>
+  {/* Chart Container with Dynamic Height */}
+  <div className="h-64 sm:h-96"> {/* Adjust height for mobile and desktop */}
+    <Line
+      data={{
+        labels: selectedData.labels,
+        datasets: selectedData.datasets,
+      }}
+      options={{
+        responsive: true,
+        maintainAspectRatio: false, // Ensure the chart fits the container
+        plugins: {
+          legend: { position: "top" },
+          title: { display: true, text: "ExtensoMeter" },
+        },
+        scales: {
+          x: {
+            grid: { color: "rgba(255, 255, 255, 0.1)" },
+            ticks: { color: "rgba(255, 255, 255, 0.7)" },
+          },
+          y: {
+            grid: { color: "rgba(255, 255, 255, 0.1)" },
+            ticks: { color: "rgba(255, 255, 255, 0.7)" },
+          },
+        },
+      }}
+    />
+  </div>
 
-          {/* Location Selection Dropdown */}
-          <div className="mt-6">
-            <div className="relative inline-block text-left w-full">
+  {/* Location Selection Dropdown */}
+  <div className="mt-6">
+    <div className="relative inline-block text-left w-full">
+      <button
+        type="button"
+        className="inline-flex justify-between w-full px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {selectedCrossCut || selectedLevel || "Select Location"}
+        <svg
+          className="-mr-1 ml-2 h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 z-10">
+          {Object.keys(levels).map((level) => (
+            <div key={level} className="relative">
               <button
-                type="button"
-                className="inline-flex justify-between w-full px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all"
-                onClick={() => setIsOpen(!isOpen)}
+                className="w-full text-left px-4 py-2 hover:bg-gray-600 text-white cursor-pointer"
+                onClick={() => setSelectedLevel(selectedLevel === level ? null : level)}
               >
-                {selectedCrossCut || selectedLevel || "Select Location"}
-                <svg
-                  className="-mr-1 ml-2 h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                {level}
               </button>
 
-              {isOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
-                  {Object.keys(levels).map((level) => (
-                    <div key={level} className="relative">
-                      <button
-                        className="w-full text-left px-4 py-2 hover:bg-gray-600 text-white cursor-pointer"
-                        onClick={() => setSelectedLevel(selectedLevel === level ? null : level)}
-                      >
-                        {level}
-                      </button>
-
-                      {selectedLevel === level && (
-                        <div className="ml-4 mt-1 w-full bg-gray-600 text-white shadow-md rounded-md">
-                          {levels[level].map((crossCut) => (
-                            <div
-                              key={crossCut}
-                              className="px-4 py-2 hover:bg-gray-500 cursor-pointer"
-                              onClick={() => {
-                                setSelectedCrossCut(crossCut);
-                                setIsOpen(false);
-                              }}
-                            >
-                              {crossCut}
-                            </div>
-                          ))}
-                        </div>
-                      )}
+              {selectedLevel === level && (
+                <div className="ml-4 mt-1 w-full bg-gray-600 text-white shadow-md rounded-md">
+                  {levels[level].map((crossCut) => (
+                    <div
+                      key={crossCut}
+                      className="px-4 py-2 hover:bg-gray-500 cursor-pointer"
+                      onClick={() => {
+                        setSelectedCrossCut(crossCut);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {crossCut}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-          </div>
+          ))}
         </div>
+      )}
+    </div>
+  </div>
+</div>
 
         {/* Information Section */}
         <div className="w-full lg:w-1/4 flex flex-col gap-6">
