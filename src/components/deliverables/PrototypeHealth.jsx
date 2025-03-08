@@ -41,10 +41,13 @@ const HealthOfPrototype = () => {
 
           // Add notification for critical failures
           if (newStatus === 'not working' && part.status === 'working') {
-            setNotifications((prev) => [
-              ...prev,
-              { id: Date.now(), message: `${part.name} has failed!`, type: 'error' },
-            ]);
+            const newNotification = { id: Date.now(), message: `${part.name} has failed!`, type: 'error' };
+            setNotifications((prev) => [...prev, newNotification]);
+
+            // Automatically remove the notification after 3 seconds
+            setTimeout(() => {
+              setNotifications((prev) => prev.filter((n) => n.id !== newNotification.id));
+            }, 3000);
           }
 
           return {
@@ -69,12 +72,15 @@ const HealthOfPrototype = () => {
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} p-4 sm:p-8`}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8">
-      <div className=' flex items-center justify-center'>
-      <h1 className='text-white text-2xl font-bold mb-6 text-center'>Health of Prototype</h1>
-      <Link to="/" className="absolute top-10 right-72 bg-[#11365c] text-white px-4 py-2 rounded-lg hover:bg-[#aec4ed] transition">
+        <h1 className="text-white text-2xl font-bold mb-6 text-center">Health of Prototype</h1>
+        <div className="hidden md:flex items-center justify-center">
+          <Link
+            to="/"
+            className="absolute top-10 right-72 bg-[#11365c] text-white px-4 py-2 rounded-lg hover:bg-[#aec4ed] transition"
+          >
             Home
-      </Link>
-      </div>
+          </Link>
+        </div>
         <div className="flex items-center space-x-4">
           <input
             type="text"
@@ -191,6 +197,16 @@ const HealthOfPrototype = () => {
             </div>
           </motion.div>
         ))}
+      </div>
+
+      {/* Home Button for Mobile */}
+      <div className="mt-8 text-center block sm:hidden">
+        <Link
+          to="/"
+          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all"
+        >
+          Home
+        </Link>
       </div>
     </div>
   );

@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { Link } from "react-router-dom";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const StrainBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +54,7 @@ const StrainBar = () => {
         temp: "22°C",
         height: "15 Mtr",
         observation: "Strata is stable, no critical changes observed.",
+
       },
     },
     "L12 South 61 X-cut": {
@@ -84,6 +89,7 @@ const StrainBar = () => {
         temp: "22°C",
         height: "23 Mtr",
         observation: "Minor deviations detected, but within safe limits.",
+   
       },
     },
     "L12 North 9 X-cut": {
@@ -120,6 +126,7 @@ const StrainBar = () => {
         temp: "23°C",
         height: "22 Mtr",
         observation: "Minor deviations detected, but within safe limits.",
+
       },
     },
     "L13 North 31 X-cut": {
@@ -157,6 +164,7 @@ const StrainBar = () => {
         temp: "23°C",
         height: "15 Mtr",
         observation: "Although there are deviations but since the Critical Ratio is below 2, it indicates that the strata is stable and provides good working conditions.",
+
       },
     },
     "L13 South 49 X-cut": {
@@ -191,6 +199,7 @@ const StrainBar = () => {
         temp: "23°C",
         height: "8 Mtr",
         observation: "Minor deviations detected, but within safe limits.",
+     
       },
     },
   };
@@ -205,19 +214,27 @@ const StrainBar = () => {
       temp: "N/A",
       height: "N/A",
       observation: "Select a location to see observations.",
+ 
     },
   };
 
   return (
-    <div className="w-full text-white bg-gray-500">
-      <div className="text-white flex w-full h-min py-2 mb-1 font-bold">
-        <p className="text-2xl bg-gray-900 w-full h-12 flex justify-center rounded-full items-center font-serif">
-          Study of ground behaviour in underground metal mines vis-a-vis conventional and IoT-based instrumentation
+    <div className="min-h-screen bg-gradient-to-br from-gray-700 to-gray-900 text-white p-4 sm:p-6">
+      {/* Header */}
+      <div className="text-center mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+          Study of Ground Behaviour in Underground Metal Mines
+        </h1>
+        <p className="text-sm text-gray-400 mt-2">
+          Vis-à-vis Conventional and IoT-based Instrumentation
         </p>
       </div>
 
-      <div className="flex gap-4 m-5">
-        <div className="flex-auto h-[815px] bg-gray-400"> 
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Chart Section */}
+        <div className="flex-1 bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6">
+          <h2 className="text-xl font-semibold mb-4">Strain Bar Data</h2>
           <Line
             data={{
               labels: selectedData.labels,
@@ -225,7 +242,11 @@ const StrainBar = () => {
                 {
                   label: "Cumulative Difference",
                   data: selectedData.values,
-                  backgroundColor: "rgba(255, 99, 132, 0.5)",
+                  borderColor: "rgba(75, 192, 192, 1)",
+                  backgroundColor: "rgba(75, 192, 192, 0.2)",
+                  borderWidth: 2,
+                  pointRadius: 2,
+                  pointBackgroundColor: "rgba(75, 192, 192, 1)",
                 },
               ],
             }}
@@ -235,79 +256,123 @@ const StrainBar = () => {
                 legend: { position: "top" },
                 title: { display: true, text: "Strain Bar" },
               },
+              scales: {
+                x: {
+                  grid: { color: "rgba(255, 255, 255, 0.1)" },
+                  ticks: { color: "rgba(255, 255, 255, 0.7)" },
+                },
+                y: {
+                  grid: { color: "rgba(255, 255, 255, 0.1)" },
+                  ticks: { color: "rgba(255, 255, 255, 0.7)" },
+                },
+              },
             }}
           />
 
           {/* Location Selection Dropdown */}
-      <div className="w-full h-auto mt-10 flex justify-center">
-        <div className="relative inline-block text-left">
-          <button
-            type="button"
-            className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white hover:bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {selectedCrossCut || selectedLevel || "Select Location"}
-            <svg className="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-            </svg>
-          </button>
+          <div className="mt-6">
+            <div className="relative inline-block text-left w-full">
+              <button
+                type="button"
+                className="inline-flex justify-between w-full px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {selectedCrossCut || selectedLevel || "Select Location"}
+                <svg
+                  className="-mr-1 ml-2 h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
 
-          {isOpen && (
-            <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5">
-              {Object.keys(levels).map((level) => (
-                <div key={level} className="relative">
-                  <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-200 text-gray-900 cursor-pointer"
-                    onClick={() => setSelectedLevel(selectedLevel === level ? null : level)}
-                  >
-                    {level}
-                  </button>
+              {isOpen && (
+                <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
+                  {Object.keys(levels).map((level) => (
+                    <div key={level} className="relative">
+                      <button
+                        className="w-full text-left px-4 py-2 hover:bg-gray-600 text-white cursor-pointer"
+                        onClick={() => setSelectedLevel(selectedLevel === level ? null : level)}
+                      >
+                        {level}
+                      </button>
 
-                  {selectedLevel === level && (
-                    <div className="mt-1 w-full bg-gray-100 text-gray-800 shadow-md rounded-md">
-                      {levels[level].map((crossCut) => (
-                        <div
-                          key={crossCut}
-                          className="px-4 py-2 hover:bg-gray-300 cursor-pointer"
-                          onClick={() => {
-                            setSelectedCrossCut(crossCut);
-                            setIsOpen(false);
-                          }}
-                        >
-                          {crossCut}
+                      {selectedLevel === level && (
+                        <div className="ml-4 mt-1 w-full bg-gray-600 text-white shadow-md rounded-md">
+                          {levels[level].map((crossCut) => (
+                            <div
+                              key={crossCut}
+                              className="px-4 py-2 hover:bg-gray-500 cursor-pointer"
+                              onClick={() => {
+                                setSelectedCrossCut(crossCut);
+                                setIsOpen(false);
+                              }}
+                            >
+                              {crossCut}
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </div>
-      </div>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="h-[400px] w-[200px] bg-red-500  rounded-md p-1"> 
-            <h1 className="font-bold mb-1">Information: </h1>
-            <p> <span className="font-bold">Instrument S No:</span> {selectedData.info.instrument}</p>
-            <p> <span className="font-bold">Location:</span> {selectedData.info.location}</p>
-            <p> <span className="font-bold">Date of Installation:</span> {selectedData.info.installation}</p>
-            <p> <span className="font-bold">Calibration Temp:</span> {selectedData.info.temp}</p>
-            <p> <span className="font-bold">Stope Height:</span> {selectedData.info.height}</p>
+        {/* Information Section */}
+        <div className="w-full lg:w-1/4 flex flex-col gap-6">
+          <div className="bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6">
+            <h2 className="text-xl font-semibold mb-4"> Information</h2>
+            <div className="space-y-4">
+              <p>
+                <span className="font-bold">Instrument S No:</span>{" "}
+                {selectedData.info.instrument}
+              </p>
+              <p>
+                <span className="font-bold">Location:</span>{" "}
+                {selectedData.info.location}
+              </p>
+              <p>
+                <span className="font-bold">Installation Date:</span>{" "}
+                {selectedData.info.installation}
+              </p>
+              <p>
+                <span className="font-bold">Calibration Temp:</span>{" "}
+                {selectedData.info.temp}
+              </p>
+              <p>
+                <span className="font-bold">Stope Height:</span>{" "}
+                {selectedData.info.height}
+              </p>
+          
+            </div>
           </div>
 
-          <div className="h-[400px] w-[200px] p-1 bg-green-700 rounded-md"> 
-            <h1 className="font-bold mb-1">Observation</h1>
+          <div className="bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6">
+            <h2 className="text-xl font-semibold mb-4"> Observation</h2>
             <p>{selectedData.info.observation}</p>
           </div>
         </div>
       </div>
 
-      <div className='h-[100px] bg-gray-500'>
-      <Link to="/" className="absolute -bottom-18 left-10 bg-[#3e3e3e] text-white px-4 py-2 rounded-lg hover:bg-[#222223] transition">
-                    Home
-      </Link>
+      {/* Home Button */}
+      <div className="mt-8 text-center">
+        <Link
+          to="/"
+          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all"
+        >
+           Home
+        </Link>
+      </div>
+      <div className=" bg-gray-850 h-[100px]">
+
       </div>
     </div>
   );
