@@ -1,41 +1,85 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { Client, Storage, ID } from "appwrite";
 
+// Initialize Appwrite
+const client = new Client()
+.setEndpoint("https://cloud.appwrite.io/v1") // Replace with your Appwrite server URL if hosted remotely
+.setProject("67cb387e000e2f38aff9"); // Replace with your actual Project ID
+
+const storage = new Storage(client);
 
 const Reports = () => {
   const [reports, setReports] = useState([]);
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null); // Track which dropdown is open
 
+  // Load reports from Appwrite Storage when the component mounts
   useEffect(() => {
-    // Load reports from local storage when the component mounts
-    const storedReports = JSON.parse(localStorage.getItem("reports")) || [];
-    setReports(storedReports);
+    const fetchReports = async () => {
+      try {
+        const response = await storage.listFiles("67cb3ee0002aa33fc76c"); // Replace with your bucket ID
+        const files = response.files;
+    
+        // Fetch file view URLs for PDFs
+        const reportsWithData = await Promise.all(
+          files.map(async (file) => {
+            const fileUrl = await storage.getFileView("67cb3ee0002aa33fc76c", file.$id);
+            return { id: file.$id, name: file.name, data: fileUrl };
+          })
+        );
+    
+        setReports(reportsWithData);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      }
+    };
+
+    fetchReports();
   }, []);
 
-  const handleUpload = (event) => {
+  // Handle file upload
+  const handleUpload = async (event) => {
     const file = event.target.files[0];
     if (file && file.type === "application/pdf") {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const newReport = { name: file.name, data: reader.result };
-        const updatedReports = [...reports, newReport];
+      try {
+        // Upload file to Appwrite Storage
+        const response = await storage.createFile(
+          "67cb3ee0002aa33fc76c", // Replace with your bucket ID
+          ID.unique(), // Generate a unique ID for the file
+          file
+        );
 
-        setReports(updatedReports);
-        localStorage.setItem("reports", JSON.stringify(updatedReports));
-      };
-      reader.readAsDataURL(file);
+        // Get file preview URL
+        const fileUrl = await storage.getFilePreview("67cb3ee0002aa33fc76c", response.$id);
+
+        // Add the new report to the state
+        const newReport = { id: response.$id, name: file.name, data: fileUrl };
+        setReports((prevReports) => [...prevReports, newReport]);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("Failed to upload the file. Please try again.");
+      }
     } else {
       alert("Only PDF files are allowed!");
     }
   };
 
-  const handleDelete = (index) => {
-    const updatedReports = reports.filter((_, i) => i !== index);
-    setReports(updatedReports);
-    localStorage.setItem("reports", JSON.stringify(updatedReports));
-    setOpenDropdownIndex(null); // Close dropdown after deletion
+  // Handle file deletion
+  const handleDelete = async (id) => {
+    try {
+      // Delete file from Appwrite Storage
+      await storage.deleteFile("67cb3ee0002aa33fc76c", id);
+
+      // Remove the report from the state
+      setReports((prevReports) => prevReports.filter((report) => report.id !== id));
+      setOpenDropdownIndex(null); // Close dropdown after deletion
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      alert("Failed to delete the file. Please try again.");
+    }
   };
 
+  // Handle opening a report in a new tab
   const handleOpen = (reportData) => {
     const newTab = window.open();
     newTab.document.write(`
@@ -43,15 +87,26 @@ const Reports = () => {
     `);
   };
 
-  const handleDownload = (report) => {
-    const link = document.createElement("a");
-    link.href = report.data;
-    link.download = report.name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Handle downloading a report
+  const handleDownload = async (report) => {
+    try {
+      // Get file download URL
+      const fileUrl = await storage.getFileDownload("67cb3ee0002aa33fc76c", report.id);
+
+      // Trigger download
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = report.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      alert("Failed to download the file. Please try again.");
+    }
   };
 
+  // Toggle dropdown menu
   const toggleDropdown = (index) => {
     setOpenDropdownIndex(openDropdownIndex === index ? null : index);
   };
@@ -78,7 +133,7 @@ const Reports = () => {
       {/* Reports List */}
       <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {reports.map((report, index) => (
-          <div key={index} className="bg-gray-800 p-3 sm:p-4 rounded-lg shadow-md">
+          <div key={report.id} className="bg-gray-800 p-3 sm:p-4 rounded-lg shadow-md">
             <div className="flex justify-between items-center">
               <h3 className="text-base sm:text-lg font-semibold">{report.name}</h3>
               {/* Dropdown for Mobile */}
@@ -105,7 +160,7 @@ const Reports = () => {
                       <span className="mr-2">⬇️</span> Download
                     </button>
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(report.id)}
                       className="w-full px-4 py-2 text-left text-white hover:bg-gray-600 flex items-center"
                     >
                       <span className="mr-2">❌</span> Delete
@@ -128,7 +183,7 @@ const Reports = () => {
                   ⬇️ Download
                 </button>
                 <button
-                  onClick={() => handleDelete(index)}
+                  onClick={() => handleDelete(report.id)}
                   className="bg-red-500 hover:bg-red-400 px-3 py-1 rounded text-white"
                 >
                   ❌ Delete
@@ -136,8 +191,13 @@ const Reports = () => {
               </div>
             </div>
             <div className="mt-3 sm:mt-4 bg-gray-700 p-2 rounded h-48 sm:h-64 overflow-hidden">
-              <iframe src={report.data} className="w-full h-full"></iframe>
-            </div>
+              <iframe
+                src={report.data}
+                className="w-full h-full"
+                title={report.name}
+                allow="autoplay; fullscreen"
+              ></iframe>
+</div>
           </div>
         ))}
       </div>
