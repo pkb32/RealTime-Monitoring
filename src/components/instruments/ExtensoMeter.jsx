@@ -234,11 +234,15 @@ const ExtensoMeter = () => {
         scales: {
           x: {
             grid: { color: "rgba(255, 255, 255, 0.1)" },
-            ticks: { color: "rgba(255, 255, 255, 0.7)" },
+            ticks: { color: "rgba(255, 255, 255, 0.7)" ,
+              maxTicksLimit: 5,
+            },
           },
           y: {
             grid: { color: "rgba(255, 255, 255, 0.1)" },
-            ticks: { color: "rgba(255, 255, 255, 0.7)" },
+            ticks: { color: "rgba(255, 255, 255, 0.7)" ,
+              maxTicksLimit: 5
+            },
           },
         },
       }}
