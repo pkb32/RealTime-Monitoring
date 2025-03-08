@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ManageUser = () => {
   // Sample user data
@@ -10,31 +11,42 @@ const ManageUser = () => {
   ]);
 
   return (
-    <div className="bg-[#1446A0] w-full h-screen flex flex-col items-center p-5">
-      {/* Page Title */}
-      <h1 className="text-white text-3xl font-bold mb-5">Contact Persons </h1>
+    <div className="bg-[#1446A0] w-full min-h-screen flex flex-col items-center p-4 sm:p-6">
+      {/* Page Title and Home Button */}
+      <div className="w-full max-w-5xl flex items-center justify-between mb-4 sm:mb-6">
+        <h1 className="text-white text-xl sm:text-2xl font-bold">Contact Persons</h1>
+        <Link
+          to="/"
+          className="bg-[#11365c] text-white px-3 py-1 sm:px-4 sm:py-2 rounded-lg hover:bg-[#aec4ed] transition text-sm sm:text-base"
+        >
+          Home
+        </Link>
+      </div>
 
       {/* User Table */}
-      <div className="w-full max-w-5xl bg-white/10 backdrop-blur-lg p-5 rounded-lg shadow-lg border border-gray-500">
+      <div className="w-full max-w-5xl bg-white/10 backdrop-blur-lg p-3 sm:p-5 rounded-lg shadow-lg border border-gray-500 overflow-x-auto">
         <table className="w-full text-left text-white">
           {/* Table Header */}
           <thead>
             <tr className="bg-blue-800 text-white">
-              <th className="p-3">Name</th>
-              <th className="p-3">Phone Number</th>
-              <th className="p-3">Email</th>
-              <th className="p-3">Designation</th>
+              <th className="p-2 sm:p-3">Name</th>
+              <th className="p-2 sm:p-3">Phone Number</th>
+              <th className="p-2 sm:p-3">Email</th>
+              <th className="p-2 sm:p-3">Designation</th>
             </tr>
           </thead>
 
           {/* Table Body */}
           <tbody>
             {users.map((user, index) => (
-              <tr key={index} className="border-b border-gray-500 hover:bg-blue-700 transition-all">
-                <td className="p-3">{user.name}</td>
-                <td className="p-3">{user.phone}</td>
-                <td className="p-3">{user.email}</td>
-                <td className="p-3">{user.designation}</td>
+              <tr
+                key={index}
+                className="border-b border-gray-500 hover:bg-blue-700 transition-all"
+              >
+                <td className="p-2 sm:p-3">{user.name}</td>
+                <td className="p-2 sm:p-3">{user.phone}</td>
+                <td className="p-2 sm:p-3">{user.email}</td>
+                <td className="p-2 sm:p-3">{user.designation}</td>
               </tr>
             ))}
           </tbody>

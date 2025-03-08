@@ -7,11 +7,17 @@ import { Link } from 'react-router-dom';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar visibility on mobile
 
   // Toggle dark mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
+  };
+
+  // Toggle sidebar on mobile
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   // Chart data
@@ -31,7 +37,11 @@ const Dashboard = () => {
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white p-6">
+      <div
+        className={`fixed inset-y-0 left-0 w-64 bg-gray-800 text-white p-6 transform ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } transition-transform duration-200 ease-in-out md:translate-x-0 z-20`}
+      >
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <nav className="mt-8">
           <ul>
@@ -60,16 +70,29 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 p-8">
+      <div className="md:ml-64 p-4 sm:p-6">
         {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <div className="flex items-center">
+        <header className="flex justify-between items-center mb-6 sm:mb-8">
+          {/* Hamburger Menu for Mobile */}
+          <button
+            onClick={toggleSidebar}
+            className="md:hidden p-2 bg-gray-200 dark:bg-gray-700 rounded-lg"
+          >
+            <span className="text-xl">☰</span>
+          </button>
+
+          {/* Search Bar */}
+          <div className="flex items-center flex-1 mx-4">
             <input
               type="text"
               placeholder="Search..."
-              className={`p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}
+              className={`p-2 rounded-lg w-full ${
+                darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
+              }`}
             />
           </div>
+
+          {/* Notification, Dark Mode, and Profile */}
           <div className="flex items-center space-x-4">
             <button className="p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">🔔</button>
             <button
@@ -84,33 +107,41 @@ const Dashboard = () => {
                 alt="Profile"
                 className="rounded-full w-[50px] h-[50px]"
               />
-              <span className="ml-2">MOIL</span>
+                            <span className="ml-2">MOIL</span>
             </div>
           </div>
         </header>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className={`p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            <h2 className="text-xl font-semibold">Total Instruments</h2>
-            <p className="text-3xl font-bold">50</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className={`p-4 sm:p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <h2 className="text-lg sm:text-xl font-semibold">Total Instruments</h2>
+            <p className="text-2xl sm:text-3xl font-bold">50</p>
           </div>
-          <div className={`p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            <h2 className="text-xl font-semibold">Installation Cost</h2>
-            <p className="text-3xl font-bold">$22,942.78</p>
+          <div className={`p-4 sm:p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <h2 className="text-lg sm:text-xl font-semibold">Installation Cost</h2>
+            <p className="text-2xl sm:text-3xl font-bold">$22,942.78</p>
           </div>
-          <div className={`p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            <h2 className="text-xl font-semibold">Active Projects</h2>
-            <p className="text-3xl font-bold">23</p>
+          <div className={`p-4 sm:p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <h2 className="text-lg sm:text-xl font-semibold">Active Projects</h2>
+            <p className="text-2xl sm:text-3xl font-bold">23</p>
           </div>
         </div>
 
         {/* Chart */}
-        <div className={`p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          <h2 className="text-xl font-semibold mb-4">Opex & Capex</h2>
+        <div className={`p-4 sm:p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <h2 className="text-lg sm:text-xl font-semibold mb-4">Opex & Capex</h2>
           <Bar data={chartData} />
         </div>
       </div>
+
+      {/* Overlay for Mobile Sidebar */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
     </div>
   );
 };
