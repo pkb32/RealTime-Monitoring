@@ -19,13 +19,13 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const HealthOfPrototype = () => {
   const [parts, setParts] = useState([
     { id: 1, name: 'Main Board', health: 85, status: 'working', history: [85, 80, 78, 82, 85] },
-    { id: 2, name: 'Sensor A', health: 45, status: 'not working', history: [45, 50, 48, 47, 45] },
+    { id: 2, name: 'Sensor Node', health: 45, status: 'not working', history: [45, 50, 48, 47, 45] },
     { id: 3, name: 'Battery unit', health: 90, status: 'working', history: [90, 88, 89, 91, 90] },
     { id: 4, name: 'LED Panel', health: 95, status: 'working', history: [95, 94, 96, 95, 95] },
     { id: 5, name: 'Power Supply', health: 30, status: 'not working', history: [30, 35, 32, 31, 30] },
     { id: 6, name: 'Communication Module', health: 80, status: 'working', history: [80, 78, 79, 81, 80] },
     { id: 7, name: 'Micro Controller', health: 70, status: 'working', history: [70, 72, 71, 69, 70] },
-    { id: 8, name: 'Antenna', health: 49, status: 'not working', history: [49, 50, 48, 92, 49] },
+    { id: 8, name: 'Router', health: 49, status: 'not working', history: [49, 50, 48, 92, 49] },
   ]);
   const [notifications, setNotifications] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
