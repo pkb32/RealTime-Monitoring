@@ -120,11 +120,11 @@ const Dashboard = () => {
           </div>
           <div className={`p-4 sm:p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
             <h2 className="text-lg sm:text-xl font-semibold">Installation Cost</h2>
-            <p className="text-2xl sm:text-3xl font-bold">$22,942.78</p>
+            <p className="text-2xl sm:text-3xl font-bold">RS.22,00,000 </p>
           </div>
           <div className={`p-4 sm:p-6 rounded-lg shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
             <h2 className="text-lg sm:text-xl font-semibold">Active Projects</h2>
-            <p className="text-2xl sm:text-3xl font-bold">23</p>
+            <p className="text-2xl sm:text-3xl font-bold">3</p>
           </div>
         </div>
 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const ManageUser = () => {
   // Sample user data
   const [users, setUsers] = useState([
-    { name: "Sighnam Jayanthu", phone: "9938303259", email: "sjayanthu@yahoo.com", designation: "Co-Investigator" },
+    { name: "Signam Jayantu", phone: "9938303259", email: "sjayanthu@yahoo.com", designation: "Co-Investigator" },
     { name: "Abhaya Kumar Samal", phone: "9437141314", email: "abhaya@tat.ac.in", designation: "Principal Investigator" },
     { name: "Jitendra Prammanik", phone: "7978738612", email: "jitendra.pramanik@cutm.ac.in", designation: "Phd Research Scholar" },
     { name: "Prayash Kumar Behera", phone: "9776992132", email: "prayashkumarb@gmail.com", designation: "Btech Research Scholar" },
