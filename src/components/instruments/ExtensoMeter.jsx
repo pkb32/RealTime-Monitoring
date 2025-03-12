@@ -71,7 +71,7 @@ const ExtensoMeter = () => {
         installation: "From May 2022 to April 2023",
         temp: "22°C",
         height: "19 Mtr",
-        observation: "Strata is stable, no critical changes observed.",
+        observation: "Around 2nd  December 2022, there was a significant spike in deformation, particularly in the 12m and 9m anchorages. It is because on the same day blasting operation was conducted nearby the location of the instrument",
       },
     },
     "L11 North 11 X-cut": {
