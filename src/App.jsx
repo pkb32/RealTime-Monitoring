@@ -12,6 +12,7 @@ import Layout from './Layout.jsx'
 import Dashboard from './components/deliverables/Dashboard.jsx'
 import Reports from './components/deliverables/Reports.jsx'
 import ManageUser from './components/deliverables/ManageUser.jsx'
+import Rtm from './components/instruments/Rtm.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="/dashboard" element={<Dashboard />} />      
       <Route path="/reports" element={<Reports />} />
       <Route path="/manage-users" element={<ManageUser />} />
+      <Route path="/real-time-monitoring" element = {<Rtm />} />
     </Route>
   )
 );

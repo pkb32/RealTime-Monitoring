@@ -65,12 +65,13 @@ const Home = () => {
             <div className="absolute bottom-8 flex justify-center w-full">
                 {/* Show navigation bar on PC */}
                 {windowWidth > 640 && (
-                    <div className="flex w-2/4 h-16 items-center justify-center rounded-full bg-opacity-40 backdrop-blur-lg bg-[#0AE2FF]/20 shadow-xl border border-cyan-300">
+                    <div className="flex w-3/4 h-16 items-center justify-center rounded-full bg-opacity-40 backdrop-blur-lg bg-[#0AE2FF]/20 shadow-xl border border-cyan-300">
                         <ul className="flex flex-col items-center gap-16 font-medium lg:flex-row lg:space-x-10">
                             {[
                                 { name: "Strain Bar", link: "/strainBar" },
                                 { name: "Load Cell", link: "/loadCell" },
                                 { name: "Extensometer", link: "/extensometer" },
+                                {name: "Real-Time Monitoring", link: "/real-time-monitoring"}
                             ].map((item, index) => (
                                 <li key={index}>
                                     <Link
@@ -102,6 +103,7 @@ const Home = () => {
                                 { name: "Strain Bar", link: "/strainBar" },
                                 { name: "Load Cell", link: "/loadCell" },
                                 { name: "Extensometer", link: "/extensometer" },
+                                {name: "Real-Time Monitoring", link: "/real-time-monitoring"}
                             ].map((item, index) => (
                                 <Link
                                     key={index}
