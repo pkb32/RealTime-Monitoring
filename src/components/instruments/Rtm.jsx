@@ -50,7 +50,7 @@ function Rtm() {
     fetchData();
     const intervalId = setInterval(fetchData, 15000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, 5000);
 
   if (error) return <div className="text-red-500 text-center mt-4">{error}</div>;
   if (!data) return <div className="text-white text-3xl bg-blue-900 w-full min-h-screen text-center mt-4">Loading...</div>;
